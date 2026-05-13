@@ -1,23 +1,21 @@
-```markdown
-# BongcongAI 🤖
+# BongcongAI
 
-A sleek, bilingual AI chat interface powered by **Llama 3.1** via Groq. Supports Bengali & English out of the box.
+A simple and friendly AI chatbot built with HTML, Tailwind CSS, and JavaScript.
+
+## Live Demo
+🚀 https://bongcongai73.netlify.app/
 
 ## Features
-- 🌗 Dark / Light mode
-- 🇧🇩 Bengali + English support
-- ⚡ Fast responses via Groq API
-- 💾 Chat history saved in localStorage
-- 📱 Responsive design
+- AI Chat Interface
+- Dark/Light Mode
+- Chat History
+- Responsive Design
+- Clean UI
 
+## Technologies Used
+- HTML
+- Tailwind CSS
+- JavaScript
 
-## Tech Stack
-- Tailwind CSS v4 
-- Vanilla JS
-- Groq API — `llama-3.1-8b-instant`
-
-## Live Demo - ( https://bongcongai73.netlify.app/ )
-
-## License
-MIT
-```
+## Author
+Developed by Saiful
