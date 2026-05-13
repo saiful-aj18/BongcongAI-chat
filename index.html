@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BongcongAI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <style type="text/tailwindcss">
+
+
+    @theme {
+      --font-playfair: "Playfair Display", serif;
+      --font-dm:       "DM Sans", sans-serif;
+
+  
+      --color-bg-body:    #0a0a0f;
+      --color-bg-card:    #111118;
+      --color-bg-input:   #16161f;
+      --color-bg-hover:   #1c1c28;
+      --color-ai-bubble:  #13131e;
+      --color-text-pri:   #f0f0f8;
+      --color-text-muted: #6b6b8a;
+      --color-text-dim:   #4a4a6a;
+      --color-border:     rgba(255,255,255,0.07);
+      --color-border-glow:rgba(99,179,237,0.3);
+      --color-accent-glow:rgba(99,179,237,0.15);
+      --color-accent:     #63b3ed;
+      --color-accent2:    #9f7aea;
+      --color-success:    #68d391;
+      --color-danger:     #fc8181;
+
+      
+      --animate-fade-up:      fade-up 0.3s ease both;
+      --animate-fade-up-slow: fade-up 0.5s ease both;
+      --animate-fade-in:      fade-in 0.25s ease both;
+      --animate-pulse-dot:    pulse-dot 2s infinite;
+      --animate-typing:       typing 1.2s infinite;
+      --animate-typing2:      typing 1.2s 0.2s infinite;
+      --animate-typing3:      typing 1.2s 0.4s infinite;
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes pulse-dot {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%     { opacity:.6; transform:scale(.85); }
+    }
+    @keyframes typing {
+      0%,100% { opacity:.3; transform:scale(.8); }
+      50%     { opacity:1;  transform:scale(1); }
+    }
+
+    
+    .light {
+      --color-bg-body:    #f0f2f8;
+      --color-bg-card:    #ffffff;
+      --color-bg-input:   #f5f7ff;
+      --color-bg-hover:   #eef0fa;
+      --color-ai-bubble:  #f8faff;
+      --color-text-pri:   #1a1a2e;
+      --color-text-muted: #6b7280;
+      --color-text-dim:   #9ca3af;
+      --color-border:     rgba(0,0,0,0.08);
+      --color-border-glow:rgba(99,179,237,0.4);
+      --color-accent-glow:rgba(59,130,246,0.1);
+      --color-danger:     #ef4444;
+    }
+
+    
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-dm);
+      -webkit-font-smoothing: antialiased;
+      background-color: var(--color-bg-body);
+      color: var(--color-text-pri);
+      transition: background-color 0.4s, color 0.4s;
+    }
+
+    
+    body::before {
+      content: '';
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 10%, rgba(99,179,237,.06) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 80% 80%, rgba(159,122,234,.05) 0%, transparent 70%);
+    }
+
+    
+    @utility bg-card    { background-color: var(--color-bg-card); }
+    @utility bg-input   { background-color: var(--color-bg-input); }
+    @utility bg-hover   { background-color: var(--color-bg-hover); }
+    @utility bg-ai-bub  { background-color: var(--color-ai-bubble); }
+
+    @utility text-pri   { color: var(--color-text-pri); }
+    @utility text-muted { color: var(--color-text-muted); }
+    @utility text-dim   { color: var(--color-text-dim); }
+    @utility text-danger{ color: var(--color-danger); }
+
+    @utility border-soft {
+      border: 1px solid var(--color-border);
+    }
+    @utility border-user {
+      border: 1px solid rgba(99,179,237,0.2);
+    }
+    @utility ring-focus {
+      border-color: var(--color-border-glow);
+      box-shadow: 0 0 0 4px var(--color-accent-glow);
+    }
+
+    
+    .brand-name {
+      font-family: var(--font-playfair);
+      font-size: 18px; font-weight: 700; letter-spacing: -0.3px;
+      background: linear-gradient(135deg, var(--color-text-pri) 60%, var(--color-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    
+    .chat-area::-webkit-scrollbar       { width: 4px; }
+    .chat-area::-webkit-scrollbar-track { background: transparent; }
+    .chat-area::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
+
+    
+    .header-shimmer::after {
+      content: '';
+      position: absolute; bottom: 0; left: 24px; right: 24px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+      opacity: 0.3;
+    }
+
+    
+    .input-wrap:focus-within { @apply ring-focus; }
+
+    
+    textarea {
+      resize: none;
+      color: var(--color-text-pri);
+      background: transparent;
+      border: none;
+      outline: none;
+    }
+    textarea::placeholder { color: var(--color-text-dim); }
+
+    .no-anim { animation: none !important; }
+  </style>
+</head>
+
+<body class="h-screen flex items-center justify-center overflow-hidden">
+
+<div id="chatWrapper"
+     class="relative z-10 w-full max-w-[680px] h-[92vh] flex flex-col rounded-3xl overflow-hidden
+            border-soft bg-card
+            shadow-[0_32px_80px_rgba(0,0,0,.5),0_0_60px_rgba(99,179,237,.04)]">
+
+  
+  <header class="header-shimmer relative px-6 py-5 flex items-center justify-between
+                 border-b border-[var(--color-border)] bg-card flex-shrink-0">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-[10px] bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-accent2)]
+                  flex items-center justify-center
+                  shadow-[0_4px_16px_rgba(99,179,237,.3)] text-white text-sm">✦</div>
+      <div>
+        <div class="brand-name">BongcongAI</div>
+        <div class="text-[11px] font-light tracking-wide mt-px text-muted">Powered by Llama 3.1</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="w-2 h-2 rounded-full bg-[var(--color-success)]
+                  shadow-[0_0_8px_rgba(104,211,145,.6)] animate-pulse-dot" title="Online"></div>
+      <button id="themeBtn"
+              class="w-9 h-9 rounded-[10px] flex items-center justify-center text-[15px] cursor-pointer
+                     border-soft bg-card text-muted transition-all duration-200
+                     hover:text-[var(--color-accent)]"
+              title="Toggle theme">☀️</button>
+    </div>
+  </header>
+
+  
+  <div class="chat-area flex-1 overflow-y-auto px-5 py-6 flex flex-col gap-4 scroll-smooth" id="chat">
+    <div class="flex-1 flex flex-col items-center justify-center gap-3 px-10 text-center animate-fade-up-slow"
+         id="welcome">
+      <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-accent2)]
+                  flex items-center justify-center text-2xl text-white
+                  shadow-[0_8px_32px_rgba(99,179,237,.25)] mb-2">✦</div>
+      <h2 class="font-[family-name:var(--font-playfair)] text-[22px] font-semibold text-pri">
+        How can I help you?
+      </h2>
+      <p class="text-sm font-light max-w-[280px] leading-relaxed text-muted">
+        Ask me anything — I'll reply in Bengali or English, whatever you prefer.
+      </p>
+      <div class="flex flex-wrap gap-2 justify-center mt-2">
+        <button class="px-[14px] py-2 rounded-full text-[13px] cursor-pointer
+                       border-soft bg-input text-muted
+                       transition-all duration-200
+                       hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]"
+                onclick="quickSend('তুমি কে?')">তুমি কে?</button>
+        <button class="px-[14px] py-2 rounded-full text-[13px] cursor-pointer
+                       border-soft bg-input text-muted
+                       transition-all duration-200
+                       hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]"
+                onclick="quickSend('আজকের আবহাওয়া কেমন?')">আজকের আবহাওয়া?</button>
+        <button class="px-[14px] py-2 rounded-full text-[13px] cursor-pointer
+                       border-soft bg-input text-muted
+                       transition-all duration-200
+                       hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]"
+                onclick="quickSend('একটা গল্প লেখো')">একটা গল্প লেখো</button>
+        <button class="px-[14px] py-2 rounded-full text-[13px] cursor-pointer
+                       border-soft bg-input text-muted
+                       transition-all duration-200
+                       hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]"
+                onclick="quickSend('JavaScript শেখাও')">JS শেখাও</button>
+      </div>
+    </div>
+  </div>
+
+ 
+  <div class="px-5 pt-4 pb-5 border-t border-[var(--color-border)] bg-card flex-shrink-0">
+    <div class="input-wrap flex gap-[10px] items-end rounded-2xl px-[18px] py-[10px] pr-[10px]
+                border-soft bg-input transition-all duration-200">
+      <textarea id="msg"
+                class="flex-1 font-[family-name:var(--font-dm)] text-[14.5px] leading-relaxed
+                       max-h-[120px] min-h-[24px]"
+                placeholder="মেসেজ লিখো..." rows="1"></textarea>
+      <button id="clearBtn"
+              class="w-[38px] h-[38px] rounded-[10px] flex items-center justify-center text-sm
+                     flex-shrink-0 cursor-pointer border-soft bg-card text-muted
+                     transition-all duration-200
+                     hover:border-[var(--color-danger)] hover:text-danger
+                     hover:bg-[rgba(252,129,129,.08)]"
+              title="Clear chat">🗑️</button>
+      <button id="sendBtn"
+              class="w-[38px] h-[38px] rounded-[10px] border-0 flex-shrink-0 cursor-pointer
+                     bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-accent2)]
+                     text-white flex items-center justify-center
+                     shadow-[0_2px_12px_rgba(99,179,237,.3)]
+                     transition-all duration-200
+                     hover:scale-105 hover:shadow-[0_4px_20px_rgba(99,179,237,.45)]
+                     active:scale-95"
+              title="Send">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+    <p class="text-[11.5px] mt-[10px] text-center tracking-[0.2px] text-dim">
+      Enter to send · Shift+Enter for new line <br> Developed by Saiful
+    </p>
+  </div>
+</div>
+
+
+<div class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center
+            z-[100] animate-fade-in" id="modal">
+  <div class="rounded-[20px] p-8 max-w-[340px] w-[90%] text-center
+              border-soft bg-card
+              shadow-[0_32px_80px_rgba(0,0,0,.5)]">
+    <div class="text-[32px] mb-4">🗑️</div>
+    <h3 class="font-[family-name:var(--font-playfair)] text-lg mb-2 text-pri">Clear Conversation</h3>
+    <p class="text-[13.5px] leading-relaxed mb-6 text-muted">
+      সব মেসেজ মুছে যাবে। এটা আর ফিরিয়ে আনা যাবে না।
+    </p>
+    <div class="flex gap-[10px]">
+      <button id="cancelBtn"
+              class="flex-1 py-[11px] rounded-xl text-sm font-medium cursor-pointer
+                     border-soft bg-input text-muted
+                     transition-all duration-200 hover:text-pri"
+              onclick="closeModal()">Cancel</button>
+      <button class="flex-1 py-[11px] rounded-xl border-0 text-white text-sm font-medium cursor-pointer
+                     bg-gradient-to-br from-[#fc8181] to-[#e53e3e]
+                     shadow-[0_4px_16px_rgba(229,62,62,.3)]
+                     transition-all duration-200 hover:opacity-90"
+              onclick="confirmClear()">Clear All</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
